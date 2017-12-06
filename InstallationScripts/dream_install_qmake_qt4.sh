@@ -42,24 +42,51 @@ sudo ln -s /usr/local/lib/libfaac_drm.so.0.0.0 /usr/local/lib/libfaac_drm.so
 cd ..
 
 # 4. Build and install Dream
+# Follow this https://sourceforge.net/p/drm/wiki/Build%20on%20Ubuntu/
+#Install build tools
 
-wget http://downloads.sourceforge.net/drm/dream-2.1.1-svn808.tar.gz
-tar zxf dream-2.1.1-svn808.tar.gz
-cd dream
-sed -i -- 's#$$OUT_PWD#/usr#g' dream.pro
-sed -i -- 's#faad_drm#faad2_drm#g' dream.pro
-$QMAKE_EXEC
-make $MAKE_ARGS
-sudo cp dream /usr/local/bin/dream
-sudo cp src/GUI-QT/res/MainIcon.svg /usr/share/icons/dream.svg
-printf "[Desktop Entry]\nVersion=1.0\nType=Application\nName=Dream\nComment=Software Digital Radio Mondiale Receiver\nTryExec=/usr/local/bin/dream\nExec=/usr/local/bin/dream\nIcon=dream.svg\nCategories=Audio;AudioVideo;Science;Electronics\n" | tee dream.desktop
-cp dream.desktop ~/.local/share/applications/dream.desktop
-cd ..
-sudo ldconfig
+sudo apt-get install g++ unzip make subversion
+
+#Install libraries
+#14.04 LTS
+#sudo apt-get install libpulse-dev libhamlib-dev fftw3-dev libqwt-dev libpcap-dev libsndfile-dev
+
+#16.04 LTS
+
+sudo apt-get install qt5-default libqt5webkit5-dev libqt5svg5-dev libqwt-qt5-dev
+sudo apt-get install libpulse-dev libhamlib-dev fftw3-dev libpcap-dev libsndfile-dev libfaad-dev
+
+#Get the dream sources
+#You can download releases from the files area. The following gets the head of the subverision reporsitory
+
+svn checkout svn://svn.code.sf.net/p/drm/code/dream dream
+
+#Building
+
+#This should now be just:
+
+ cd dream
+ qmake
+ make
+ sudo cp dream /usr/local/bin/dream
+
+#wget http://downloads.sourceforge.net/drm/dream-2.1.1-svn808.tar.gz
+#tar zxf dream-2.1.1-svn808.tar.gz
+#cd dream
+#sed -i -- 's#$$OUT_PWD#/usr#g' dream.pro
+#sed -i -- 's#faad_drm#faad2_drm#g' dream.pro
+#$QMAKE_EXEC
+#make $MAKE_ARGS
+#sudo cp dream /usr/local/bin/dream
+#sudo cp src/GUI-QT/res/MainIcon.svg /usr/share/icons/dream.svg
+#printf "[Desktop Entry]\nVersion=1.0\nType=Application\nName=Dream\nComment=Software Digital Radio Mondiale Receiver\nTryExec=/usr/local/bin/dream\nExec=/usr/local/bin/dream\nIcon=dream.svg\nCategories=Audio;AudioVideo;Science;Electronics\n" | tee dream.desktop
+#cp dream.desktop ~/.local/share/applications/dream.desktop
+#cd ..
+#sudo ldconfig
 
 # 5. Cleanup
 
-rm dream-2.1.1-svn808.tar.gz
+#rm dream-2.1.1-svn808.tar.gz
 rm faac-1.28.tar.gz
 rm faad2-2.7.tar.gz
 rm -rf ./dream
